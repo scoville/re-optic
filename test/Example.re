@@ -7,7 +7,7 @@ module Address = {
 };
 
 module User = {
-  [@deriving lenses]
+  [@lenses]
   type t = {
     address: Address.t,
     age: int,

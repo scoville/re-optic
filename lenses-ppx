@@ -6,9 +6,9 @@ DIR=$(dirname "$0")
 OS="$(uname)"
 
 if [ "$OS" = "Darwin" ]; then
-  "${DIR}/binaries/ppx-osx.exe" --as-ppx $@
+  "${DIR}/binaries/ppx-osx.exe" $@
 elif [ "$OS" = "Linux" ]; then
-  "${DIR}/binaries/ppx-linux.exe" --as-ppx $@
+  "${DIR}/binaries/ppx-linux.exe" $@
 else
   echo "Os not supported"
   exit 1
