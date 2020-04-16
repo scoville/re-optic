@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# All the credits go to bs-let: https://github.com/reasonml-labs/bs-let/blob/master/ppx
+
+DIR=$(dirname "$0")
+OS="$(uname)"
+
+if [ "$OS" = "Darwin" ]; then
+  "${DIR}/binaries/ppx-osx.exe" --as-ppx $@
+elif [ "$OS" = "Linux" ]; then
+  "${DIR}/binaries/ppx-linux.exe" --as-ppx $@
+else
+  echo "Os not supported"
+  exit 1
+fi

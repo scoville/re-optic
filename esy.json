@@ -1,0 +1,24 @@
+{
+  "name": "lenses-ppx",
+  "version": "0.1.0",
+  "description": "Lenses ppx for BuckleScript",
+  "license": "MIT",
+  "esy": {
+    "build": "refmterr dune build -p #{self.name}",
+    "buildsInSource": "_build",
+    "buildEnv": { "ODOC_SYNTAX": "re" }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@esy-ocaml/reason": "^3.5.2",
+    "@opam/ppxlib": "0.10.0",
+    "@opam/dune": "1.11.4",
+    "@reason-native/rely": "^3.1.0",
+    "ocaml": "~4.6.1",
+    "refmterr": "^3.3.0"
+  },
+  "devDependencies": {
+    "@opam/merlin": "*",
+    "ocaml": "~4.6.1"
+  }
+}

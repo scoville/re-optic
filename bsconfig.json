@@ -1,0 +1,30 @@
+{
+  "name": "bs-optic",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "test",
+      "subdirs": true,
+      "type": "dev"
+    }
+  ],
+  "package-specs": [
+    {
+      "module": "commonjs",
+      "in-source": true
+    }
+  ],
+  "suffix": ".bs.js",
+  "namespace": "optic",
+  "bs-dependencies": ["bs-abstract"],
+  "ppx-flags": ["./lenses-ppx"],
+  "refmt": 3,
+  "warnings": {
+    "number": "-48",
+    "error": "+A+8+11+12+16+26+27+31+32+33+34+35+39+44+45+101+102+104+105"
+  },
+  "bsc-flags": ["-bs-super-errors"]
+}

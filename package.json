@@ -1,0 +1,21 @@
+{
+  "name": "bs-optic",
+  "version": "0.1.0",
+  "description": "Optic library for BuckleScript",
+  "license": "MIT",
+  "bin": {
+    "lenses-ppx": "./lenses-ppx"
+  },
+  "scripts": {
+    "ppx:build": "esy install && esy build",
+    "test": "yarn ppx:build && bsb -clean-world -make-world && node ./test/Example.bs.js",
+    "format:fix": "bsrefmt --in-place `find . -name *.re`"
+  },
+  "devDependencies": {
+    "bs-platform": "^7.2.2",
+    "esy": "^0.6.2"
+  },
+  "dependencies": {
+    "bs-abstract": "^1.0.0"
+  }
+}
