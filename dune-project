@@ -1,1 +1,3 @@
-(lang dune 1.11.4)
+(lang dune 2.5.0)
+
+(name "lenses-ppx")
