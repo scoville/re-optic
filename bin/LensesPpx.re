@@ -103,7 +103,7 @@ let mapStructureItem =
 
 let mapper = (_config, _cookies) => {
   ...Ast_mapper.default_mapper,
-  // TODO: Make the ppx work in mli/rei context (signature)
+  // TODO: Make the ppx work in mli/rei/resi context (signature)
   structure: (mapper, structure) =>
     structure |> List.map(mapStructureItem(mapper)) |> List.concat,
 };
