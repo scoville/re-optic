@@ -1,108 +1,127 @@
-// Some convenient compose functions
+/** Some convenient compose functions */
 
-open BsAbstract;
-open Function.Infix;
-
-let isoWithLens: 'a 'b 'c. (Lens.t('b, 'c), Iso.t('a, 'b)) => Lens.t('a, 'c) =
-  (inner, outer) =>
-    Lens.make(outer.get >. inner.get, c =>
-      Iso.Overable'.over(outer, inner.set(c))
-    );
+let isoWithLens: 'a 'b 'c. (Iso.t('a, 'b), Lens.t('b, 'c)) => Lens.t('a, 'c) =
+  ({get: isoGet} as iso, {get: lensGet, set: lensSet}) =>
+    Lens.make(x => x->isoGet->lensGet, c => iso->Iso.modify(lensSet(c)));
 
 let isoWithOptional:
   'a 'b 'c.
-  (Optional.t('b, 'c), Iso.t('a, 'b)) => Optional.t('a, 'c)
+  (Iso.t('a, 'b), Optional.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.get >. inner.getResult, c =>
-      Iso.Overable'.over(outer, inner.set(c))
+  ({get: isoGet} as iso, {getOption: optionalGetOption, set: optionalSet}) =>
+    Optional.make(
+      x => x->isoGet->optionalGetOption,
+      c => iso->Iso.modify(optionalSet(c)),
     );
 
 let isoWithPrism:
   'a 'b 'c.
-  (Prism.t('b, 'c), Iso.t('a, 'b)) => Prism.t('a, 'c)
+  (Iso.t('a, 'b), Prism.t('b, 'c)) => Prism.t('a, 'c)
  =
-  (inner, outer) =>
+  (
+    {get: isoGet, reverseGet: isoReverseGet},
+    {getOption: prismGetOption, reverseGet: prismReverseGet},
+  ) =>
     Prism.make(
-      outer.get >. inner.getResult,
-      inner.reverseGet >. outer.reverseGet,
+      x => x->isoGet->prismGetOption,
+      x => x->prismReverseGet->isoReverseGet,
     );
 
-let lensWithIso: 'a 'b 'c. (Iso.t('b, 'c), Lens.t('a, 'b)) => Lens.t('a, 'c) =
-  (inner, outer) =>
-    Lens.make(outer.get >. inner.get, c => outer.set(inner.reverseGet(c)));
+let lensWithIso: 'a 'b 'c. (Lens.t('a, 'b), Iso.t('b, 'c)) => Lens.t('a, 'c) =
+  ({get: lensGet, set: lensSet}, {get: isoGet, reverseGet: isoReverseGet}) =>
+    Lens.make(x => x->lensGet->isoGet, c => c->isoReverseGet->lensSet);
 
 let lensWithOptional:
   'a 'b 'c.
-  (Optional.t('b, 'c), Lens.t('a, 'b)) => Optional.t('a, 'c)
+  (Lens.t('a, 'b), Optional.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.get >. inner.getResult, c =>
-      Lens.Overable'.over(outer, inner.set(c))
+  ({get: lensGet} as lens, {getOption: optionalGetOption, set: optionalSet}) =>
+    Optional.make(
+      x => x->lensGet->optionalGetOption,
+      c => lens->Lens.modify(optionalSet(c)),
     );
 
 let lensWithPrism:
   'a 'b 'c.
-  (Prism.t('b, 'c), Lens.t('a, 'b)) => Optional.t('a, 'c)
+  (Lens.t('a, 'b), Prism.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.get >. inner.getResult, c =>
-      outer.set(inner.reverseGet(c))
+  (
+    {get: lensGet, set: lensSet},
+    {getOption: prismGetOption, reverseGet: prismReverseGet},
+  ) =>
+    Optional.make(
+      x => x->lensGet->prismGetOption,
+      c => c->prismReverseGet->lensSet,
     );
 
 let prismWithIso:
   'a 'b 'c.
-  (Iso.t('b, 'c), Prism.t('a, 'b)) => Prism.t('a, 'c)
+  (Prism.t('a, 'b), Iso.t('b, 'c)) => Prism.t('a, 'c)
  =
-  (inner, outer) =>
+  (
+    {reverseGet: prismReverseGet, getOption: prismGetOption},
+    {reverseGet: isoReverseGet, get: isoGet},
+  ) =>
     Prism.make(
-      outer.getResult >. Belt.Result.map(_, inner.get),
-      inner.reverseGet >. outer.reverseGet,
+      x => x->prismGetOption->Option.map(isoGet),
+      x => x->isoReverseGet->prismReverseGet,
     );
 
 let prismWithLens:
   'a 'b 'c.
-  (Lens.t('b, 'c), Prism.t('a, 'b)) => Optional.t('a, 'c)
+  (Prism.t('a, 'b), Lens.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.getResult >. Belt.Result.map(_, inner.get), c =>
-      Prism.Overable'.over(outer, inner.set(c))
+  ({getOption: prismGetOption} as prism, {get: lensGet, set: lensSet}) =>
+    Optional.make(
+      x => x->prismGetOption->Option.map(lensGet),
+      c => prism->Prism.modifyWithDefault(lensSet(c)),
     );
 
 let prismWithOptional:
   'a 'b 'c.
-  (Optional.t('b, 'c), Prism.t('a, 'b)) => Optional.t('a, 'c)
+  (Prism.t('a, 'b), Optional.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
+  (
+    {getOption: prismGetOption} as prism,
+    {getOption: optionalGetOption, set: optionalSet},
+  ) =>
     Optional.make(
-      outer.getResult >. Belt.Result.flatMap(_, inner.getResult), c =>
-      Prism.Overable'.over(outer, inner.set(c))
+      x => x->prismGetOption->Option.flatMap(optionalGetOption),
+      c => prism->Prism.modifyWithDefault(optionalSet(c)),
     );
 
 let optionalWithIso:
   'a 'b 'c.
-  (Iso.t('b, 'c), Optional.t('a, 'b)) => Optional.t('a, 'c)
+  (Optional.t('a, 'b), Iso.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.getResult >. Belt.Result.map(_, inner.get), c =>
-      outer.set(inner.reverseGet(c))
+  (
+    {getOption: optionalGetOption, set: optionalSet},
+    {get: isoGet, reverseGet: isoReverseGet},
+  ) =>
+    Optional.make(
+      x => x->optionalGetOption->Option.map(isoGet),
+      c => optionalSet(isoReverseGet(c)),
     );
 
 let optionalWithLens:
   'a 'b 'c.
-  (Lens.t('b, 'c), Optional.t('a, 'b)) => Optional.t('a, 'c)
+  (Optional.t('a, 'b), Lens.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
-    Optional.make(outer.getResult >. Belt.Result.map(_, inner.get), c =>
-      Optional.Overable'.over(outer, inner.set(c))
+  ({getOption: optionalGetOption} as optional, {get: lensGet, set: lensSet}) =>
+    Optional.make(
+      x => x->optionalGetOption->Option.map(lensGet),
+      c => optional->Optional.modifyWithDefault(lensSet(c)),
     );
 
 let optionalWithPrism:
   'a 'b 'c.
-  (Prism.t('b, 'c), Optional.t('a, 'b)) => Optional.t('a, 'c)
+  (Optional.t('a, 'b), Prism.t('b, 'c)) => Optional.t('a, 'c)
  =
-  (inner, outer) =>
+  (
+    {getOption: optionalGetOption, set: optionalSet},
+    {getOption: prismGetOption, reverseGet: prismReverseGet},
+  ) =>
     Optional.make(
-      outer.getResult >. Belt.Result.flatMap(_, inner.getResult), c =>
-      outer.set(inner.reverseGet(c))
+      x => x->optionalGetOption->Option.flatMap(prismGetOption),
+      c => optionalSet(prismReverseGet(c)),
     );

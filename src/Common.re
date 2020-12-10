@@ -1,29 +1,12 @@
-// Some common optic
+/** Some common optic */
 
-open BsAbstract;
-open Function.Infix;
-
-let id: Iso.t('a, 'a) = {get: Functions.id, reverseGet: Functions.id};
+let id: Iso.t('a, 'a) = {get: x => x, reverseGet: x => x};
 
 let stringBool: Prism.t(string, bool) =
-  Prism.make(
-    bool_of_string_opt
-    >. Option.maybe(
-         ~f=(x => Ok(x)) <. Functions.id,
-         ~default=Error("Not a valid bool"),
-       ),
-    Bool.Show.show,
-  );
+  Prism.make(bool_of_string_opt, string_of_bool);
 
 let stringInt: Prism.t(string, int) =
-  Prism.make(
-    int_of_string_opt
-    >. Option.maybe(
-         ~f=(x => Ok(x)) <. Functions.id,
-         ~default=Error("Not a valid int"),
-       ),
-    Int.Show.show,
-  );
+  Prism.make(int_of_string_opt, string_of_int);
 
 module type VARIANT = {
   type t;
@@ -33,64 +16,45 @@ module type VARIANT = {
   let tFromJs: string => option(t);
 };
 
-let variant:
-  type a.
-    (~onError: string=?, (module VARIANT with type t = a)) =>
-    Prism.t(string, a) =
-  (~onError as message="Bad value", module Variant: VARIANT with type t = a) =>
-    Prism.make(
-      Variant.tFromJs
-      >. (
-        fun
-        | Some(value) => Ok(value)
-        | None => Error(message)
-      ),
-      Variant.tToJs,
-    );
+let variant: type a. (module VARIANT with type t = a) => Prism.t(string, a) =
+  (module Variant: VARIANT with type t = a) =>
+    Prism.make(Variant.tFromJs, Variant.tToJs);
 
-// TODO: Should be functors to allow for custom error type
-
-// Naming the following "Array" could lead to conflicts.
-module Array' = {
-  let ix: 'a. int => Optional.t(array('a), 'a) =
+module Array = {
+  let index: 'a. int => Optional.t(array('a), 'a) =
     i =>
       Optional.make(
-        x =>
-          switch (Belt.Array.get(x, i)) {
-          | Some(x') => Ok(x')
-          | None => Error("Index cannot be found")
-          },
-        (c, x) =>
-          Belt.Array.mapWithIndex(x, (i', entry) => i != i' ? entry : c),
+        x => x->Array.get(i),
+        (c, x) => Array.mapWithIndex(x, (i', entry) => i != i' ? entry : c),
       );
 
-  let ixExn: 'a. int => Lens.t(array('a), 'a) =
+  let indexExn: 'a. int => Lens.t(array('a), 'a) =
     i =>
       Lens.make(
-        x => x |> Belt.Array.get(_, i) |> Belt.Option.getExn,
-        (c, x) =>
-          Belt.Array.mapWithIndex(x, (i', entry) => i != i' ? entry : c),
+        x => x->Array.get(i)->Option.getExn,
+        (c, x) => Array.mapWithIndex(x, (i', entry) => i != i' ? entry : c),
       );
 };
 
 let listArray: Iso.t(list('a), array('a)) = {
-  Iso.get: Belt.List.toArray,
-  reverseGet: Belt.List.fromArray,
+  Iso.get: List.toArray,
+  reverseGet: List.fromArray,
 };
 
-module Option' = {
+module Option = {
   let optional: Optional.t(option('a), 'a) = {
-    Optional.getResult:
-      fun
-      | Some(x) => Ok(x)
-      | None => Error("Value is None"),
+    getOption: x => x,
     set: (x, _) => Some(x),
   };
 };
 
-module Result' = {
-  let optional: 'a 'e. Optional.t(result('a, string), 'a) = {
-    Optional.getResult: Functions.id,
+module Result = {
+  let optional: 'a 'e. Optional.t(result('a, 'e), 'a) = {
+    Optional.getOption: x =>
+      switch (x) {
+      | Error(_) => None
+      | Ok(x) => Some(x)
+      },
     set: (x, _) => Ok(x),
   };
 };

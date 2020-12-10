@@ -19,12 +19,12 @@
   ],
   "suffix": ".bs.js",
   "namespace": "optic",
-  "bs-dependencies": ["bs-abstract"],
+  "bs-dependencies": [],
   "ppx-flags": ["./lenses-ppx"],
   "refmt": 3,
   "warnings": {
     "number": "-48-32",
     "error": "+A+8+11+12+16+26+27+31+33+34+35+39+44+45+101+102+104+105"
   },
-  "bsc-flags": ["-bs-super-errors"]
+  "bsc-flags": ["-bs-super-errors", "-open Belt"]
 }
