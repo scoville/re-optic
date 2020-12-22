@@ -62,3 +62,47 @@ let composeIso: 'a 'b 'c. (t('a, 'b), Iso.t('b, 'c)) => t('a, 'c) =
 /** Makes a Prism from an Iso */
 let fromIso: 'a 'b. Iso.t('a, 'b) => t('a, 'b) =
   ({get, reverseGet}) => make(x => x->get->Some, reverseGet);
+
+module Result = {
+  // An alternative to common Prisms that uses the Result type under the hood
+
+  [@deriving accessors]
+  type t('a, 'b, 'e) = {
+    getResult: 'a => result('b, 'e),
+    reverseGet: 'b => 'a,
+  };
+
+  let make: 'a 'b 'e. ('a => result('b, 'e), 'b => 'a) => t('a, 'b, 'e) =
+    (getResult, reverseGet) => {getResult, reverseGet};
+
+  /** Compose 2 Prisms */
+  let compose: 'a 'b 'c 'e. (t('a, 'b, 'e), t('b, 'c, 'e)) => t('a, 'c, 'e) =
+    (
+      {getResult: outerGetResult, reverseGet: outerReverseGet},
+      {getResult: innerGetResult, reverseGet: innerReverseGet},
+    ) =>
+      make(
+        x =>
+          switch (x->outerGetResult) {
+          | Ok(y) => y->innerGetResult
+          | Error(_) as error => error
+          },
+        x => x->innerReverseGet->outerReverseGet,
+      );
+
+  /** Map over a Prism value */
+  let modify: 'a 'b 'e. (t('a, 'b, 'e), 'b => 'b, 'a) => result('a, 'e) =
+    ({getResult, reverseGet}, f, a) =>
+      a->getResult->Result.map(x => x->f->reverseGet);
+
+  /** Map over a Prism value, returns a default value if None */
+  let modifyWithDefault: 'a 'b 'e. (t('a, 'b, 'e), 'b => 'b, 'a) => 'a =
+    (prism, f, x) => prism->modify(f, x)->Result.getWithDefault(x);
+
+  let is: 'a 'b 'e. (t('a, 'b, 'e), 'a) => bool =
+    ({getResult}, x) =>
+      switch (x->getResult) {
+      | Ok(_) => true
+      | Error(_) => false
+      };
+};
