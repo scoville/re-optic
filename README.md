@@ -1,4 +1,8 @@
-## Lenses and other optics for OCaml and ReasonML
+# Optic
+
+## [Documentation](docs/)
+
+## Lenses and other optics for ReScript
 
 _This library is not ready for prime time yet, and both its API and its implementation might change in the near future_
 
