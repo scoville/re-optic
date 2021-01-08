@@ -1,6 +1,6 @@
 # Lenses PPX
 
-While [lenses](lens.md) are very useful, it can be cumbersome to write down all the lenses you need for each type you define... To help you, bs-optic comes with an `@lenses` ppx that will generate all the lenses of a record for you.
+While [lenses](lens.md) are very useful, it can be cumbersome to write down all the lenses you need for each type you define... To help you, re-optic comes with an `@lenses` ppx that will generate all the lenses of a record for you.
 
 ## Usage
 

@@ -1,4 +1,4 @@
-# Bs-Optic documentation
+# ReOptic documentation
 
 - [Lens](lens.md)
 - [Optional](optional.md) (_in progress_)
