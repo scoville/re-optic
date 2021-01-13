@@ -9,7 +9,8 @@
   "scripts": {
     "ppx:build": "esy install && esy build",
     "test": "yarn ppx:build && bsb -clean-world -make-world && node ./test/Example.bs.js",
-    "format:fix": "bsrefmt --in-place `find bin -name *.re`"
+    "format:fix": "bsrefmt --in-place `find bin -name *.re`",
+    "postinstall": "./scripts/move-binary"
   },
   "devDependencies": {
     "bs-platform": "^8.3.3",

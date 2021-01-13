@@ -2,13 +2,16 @@
 
 # All the credits go to bs-let: https://github.com/reasonml-labs/bs-let/blob/master/ppx
 
-DIR=$(dirname "$0")
+ROOT="$(dirname "$0")/.."
 OS="$(uname)"
 
+echo $ROOT
+echo $OS
+
 if [ "$OS" = "Darwin" ]; then
-  "${DIR}/binaries/ppx-osx.exe" $@
+  cp "${ROOT}/binaries/ppx-osx.exe" "${ROOT}/lenses-ppx"
 elif [ "$OS" = "Linux" ]; then
-  "${DIR}/binaries/ppx-linux.exe" $@
+  cp "${ROOT}/binaries/ppx-linux.exe" "${ROOT}/lenses-ppx"
 else
   echo "Os not supported"
   exit 1
