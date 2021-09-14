@@ -2,19 +2,17 @@
 # yarn lockfile v1
 
 
-bs-platform@^8.3.3:
-  version "8.3.3"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-8.3.3.tgz#68e3796ad0607c55da0f45fe14c0ce0aaf69682c"
-  integrity sha512-ayS5wdvrOX6PxU2wX7O2rLllzsQDzmGq582NNDFwfM6b9HQu7ki242Pc46o2/CnGHHumKVarpX0IZzjC2Llgcg==
+bs-platform@^9.0.2:
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-9.0.2.tgz#a6eac70eb8924a322556dacaccbfbc9b2a0d3a37"
+  integrity sha512-Ye9JqJ4Oa7mcjjoOVRYI8Uc2Cf8N7jQLWDcdUplY7996d/YErSR7WitmV7XnSwr4EvdrbwjEsg1NxNjUQv3ChA==
 
-esy-solve-cudf@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/esy-solve-cudf/-/esy-solve-cudf-0.1.10.tgz#2cd48af78183ae8f06c035a398beb65673c2d77d"
-  integrity sha512-/MrZOBH0wuJndvZN8pl+S3Mg3zJaK70PH9ZZwqDeJHulghEWROEZxpmenNiS9pqAaxyUVhTZJBt2/vL9jKCJbg==
+esy@^0.6.11:
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/esy/-/esy-0.6.11.tgz#120a4095db0cbeb430967f8bb307a3dbe3165512"
+  integrity sha512-LyrQWS/c7FYwjmgSlmYcj7w7as40iVuF6aCSHKMAZq1xgmdpjorQ7OEqg35ZUf8+xpUgKnDx4HrA3scdnfRTnA==
 
-esy@^0.6.7:
-  version "0.6.7"
-  resolved "https://registry.yarnpkg.com/esy/-/esy-0.6.7.tgz#a04f5c469280115f39364e5f51927d9e74180236"
-  integrity sha512-G/C0wXDQy19eDqlFNmPg2kHmrllUez9deZd1OOIk/VTKtc75STdeE/Nl1NusVY+La/+eCtovNqk0/ZAb4Mg8gw==
-  dependencies:
-    esy-solve-cudf "^0.1.10"
+rescript@^9.1.4:
+  version "9.1.4"
+  resolved "https://registry.yarnpkg.com/rescript/-/rescript-9.1.4.tgz#1eb126f98d6c16942c0bf0df67c050198e580515"
+  integrity sha512-aXANK4IqecJzdnDpJUsU6pxMViCR5ogAxzuqS0mOr8TloMnzAjJFu63fjD6LCkWrKAhlMkFFzQvVQYaAaVkFXw==

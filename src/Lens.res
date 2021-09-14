@@ -1,9 +1,10 @@
-@@ocaml.doc(
-  `Lenses are basically meant to be used to "get" or "extract" a value from a structure.
-In other word, we can consider that a lens with pseudo type "a -> b" will get, or extract, b from a.
-For example, a lens of type "t<array<string>, string>" will get an element from an array.
-They are a safe version of Optionals.`
-)
+@@ocaml.doc("Lenses are basically meant to be used to \"get\" or \"extract\" a value from a structure.
+In other word, we can consider that a lens with pseudo type \"a -> b\" will get, or extract, b from a.
+
+For example, a lens of type \"t<array<string>, string>\" will get an element from an array.
+
+They are a safe version of Optionals.
+")
 
 @deriving(accessors)
 type t<'a, 'b> = {

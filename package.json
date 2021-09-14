@@ -8,12 +8,12 @@
   },
   "scripts": {
     "ppx:build": "esy install && esy build",
-    "test": "yarn ppx:build && bsb -clean-world -make-world && node ./test/Example.bs.js",
-    "format:fix": "bsrefmt --in-place `find bin -name *.re`",
+    "test": "yarn ppx:build && rescript clean && rescript build && node ./test/Example.bs.js",
+    "format:fix": "rescript format -all",
     "postinstall": "./scripts/move-binary"
   },
   "devDependencies": {
-    "bs-platform": "^8.3.3",
-    "esy": "^0.6.7"
+    "esy": "^0.6.11",
+    "rescript": "^9.1.4"
   }
 }

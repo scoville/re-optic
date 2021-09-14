@@ -1,10 +1,11 @@
-@@ocaml.doc(
-  `Isos are roughly used to safely "cast" or "convert" values of different (or identical) types.
-An iso "a -> b" means that b can always be casted to a, and a can always be casted to b.
-For example, an iso of type "t<list<int>, array<int>>" will always convert a list of strings to an array
+@@ocaml.doc("Isos are roughly used to safely \"cast\" or \"convert\" values of different (or identical) types.
+An iso \"a -> b\" means that b can always be casted to a, and a can always be casted to b.
+
+For example, an iso of type \"t<list<int>, array<int>>\" will always convert a list of strings to an array
 of strings, and an array of strings to a list of strings, without loss.
-They are a safe version of Prisms`
-)
+
+They are a safe version of Prisms.
+")
 
 @deriving(accessors)
 type t<'a, 'b> = {

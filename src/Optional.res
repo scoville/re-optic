@@ -1,11 +1,12 @@
-@@ocaml.doc(
-  `Optionals are basically meant to be used to "get" or "extract" a value from a structure.
-In other word, we can consider that an optional with pseudo type "a -> b" will get, or extract, b from a.
-For example, an optional of type "t<array<string>, string>" will get an element from an array.
+@@ocaml.doc("Optionals are basically meant to be used to \"get\" or \"extract\" a value from a structure.
+In other word, we can consider that an optional with pseudo type \"a -> b\" will get, or extract, b from a.
+
+For example, an optional of type \"t<array<string>, string>\" will get an element from an array.
 Notice that, unlike Lenses, Optionals can fail, and in the above example,
 one would get a option<string>, not a string.
-They are an unsafe version of Lenses.`
-)
+
+They are an unsafe version of Lenses.
+")
 
 @deriving(accessors)
 type t<'a, 'b> = {
