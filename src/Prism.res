@@ -1,10 +1,11 @@
-@@ocaml.doc(
-  `Prisms are roughly used to "cast" or "convert" values of different (or identical) types.
-A prism "a -> b" means that b can always be casted to a, and a can sometimes be casted to b.
-For example, a prism of type "t(string, int)" will always convert an int to a string,
+@@ocaml.doc("Prisms are roughly used to \"cast\" or \"convert\" values of different (or identical) types.
+A prism \"a -> b\" means that b can always be casted to a, and a can sometimes be casted to b.
+
+For example, a prism of type \"t(string, int)\" will always convert an int to a string,
 but can fail converting a string to an int.
-They are an unsafe version of Isos.`
-)
+
+They are an unsafe version of Isos.
+")
 
 @deriving(accessors)
 type t<'a, 'b> = {
@@ -64,7 +65,7 @@ let fromIso: 'a 'b. Iso.t<'a, 'b> => t<'a, 'b> = ({get, reverseGet}) =>
   make(x => x->get->Some, reverseGet)
 
 module Result = {
-  @@ocaml.doc(`An alternative to common Prisms that uses the Result type under the hood`)
+  @@ocaml.doc("An alternative to common Prisms that uses the Result type under the hood.")
 
   @deriving(accessors)
   type t<'a, 'b, 'e> = {
